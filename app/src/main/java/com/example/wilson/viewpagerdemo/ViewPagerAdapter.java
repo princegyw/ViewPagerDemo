@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 /**
  * Created by wilson on 2015/9/6.
+ * An example of ViewPagerAdapter
  */
 public class ViewPagerAdapter extends PagerAdapter {
 
@@ -67,4 +68,5 @@ public class ViewPagerAdapter extends PagerAdapter {
         Log.d("gyw", "ViewPagerAdapter::destroyItem(); position:" + position);
         ((ViewPagerItemView) object).recycle();
     }
+
 }
