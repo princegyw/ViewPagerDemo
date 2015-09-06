@@ -1,5 +1,6 @@
 ### ViewPager
-ListView enables us to populate and show thousands of datum within it and it is a a vertical flip up and down. However, many of time, we need to flip horizontally. For example, we may want to make an album to show images and which enables us to flip images one by one.
+ListView enables us to populate and show thousands of datum within it and it is a a vertical flip up and down. However, many of time, we need to flip horizontally. For example, we may want to make an album to show images and which enables us to flip images one by one. The final look of the project is as the snapshot showing below.
+![](https://lh3.googleusercontent.com/-a6xDrZ9aJQE/VexbbL-tqxI/AAAAAAAAA6g/NMC7ygDUxYg/s512-Ic42/device-2015-09-06-232457.png)
 
 #### 1. ViewPager
 ViewPager is defined in Android android.support.v4 library. One can layout with a ViewPager as below.
@@ -9,7 +10,7 @@ ViewPager is defined in Android android.support.v4 library. One can layout with 
     android:layout_width="fill_parent"  
     android:layout_height="fill_parent"  
     android:orientation="vertical" >  
-  
+
     <android.support.v4.view.ViewPager  
         android:id="@+id/viewpager"  
         android:layout_width="fill_parent"  
@@ -97,11 +98,31 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 }
 ```
-#### 3. MainActivity
+#### 3. OnPageChangeListener Interface
+As inheriting onPageChangeListener, three methods must be overwritten.
 ```java
-public class MainActivity extends AppCompatActivity {
+@Override
+public void onPageScrolled(int i, float v, int i1) {
 
-    private static final int ALBUM_NUM = 100;
+}
+
+@Override
+public void onPageSelected(int i) {
+    //This method will be invoked when a new page becomes selected.
+}
+
+@Override
+public void onPageScrollStateChanged(int i) {
+
+}
+```
+
+Here is an example of How to set OnPageChangeListener within MainActivity.
+```java
+public class MainActivity extends AppCompatActivity
+    implements ViewPager.OnPageChangeListener{
+
+    private static final int ALBUM_NUM = 12;
 
     private static final int[] ALBUM_RES = {
             R.drawable.dog1, R.drawable.dog2, R.drawable.dog3, R.drawable.dog4,
@@ -112,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
+    private LinearLayout mLinearLayout;
+
+    private ImageView[] indicators;
 
     private JSONArray mJSONArray;
 
@@ -124,7 +148,12 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPagerAdapter = new ViewPagerAdapter(this, mJSONArray);
+
+        mLinearLayout = (LinearLayout) findViewById(R.id.viewGroup);
+        initialSetImageIndicators();
+
         mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setOnPageChangeListener(this);
     }
 
     private void setupDataSources() {
@@ -141,6 +170,47 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onPageScrolled(int i, float v, int i1) {
+
+    }
+
+    @Override
+    public void onPageSelected(int i) {
+        setImageIndicators(i);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+
+    }
+
+    private void initialSetImageIndicators() {
+        indicators = new ImageView[ALBUM_NUM];
+        for (int i = 0; i < ALBUM_NUM; ++i) {
+            ImageView imageView = new ImageView(this);
+            if (i == 0) {
+                imageView.setImageResource(R.drawable.indicator_select);
+            } else {
+                imageView.setImageResource(R.drawable.indicator_idle);
+            }
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp.leftMargin = 5;
+            lp.rightMargin = 5;
+            indicators[i] = imageView;
+            mLinearLayout.addView(imageView, lp);
+        }
+    }
+
+    private void setImageIndicators(int pos) {
+        for (int i = 0; i < ALBUM_NUM; ++i) {
+            if (i == pos) {
+                indicators[i].setImageResource(R.drawable.indicator_select);
+            } else {
+                indicators[i].setImageResource(R.drawable.indicator_idle);
+            }
+        }
+    }
 }
 ```
 
@@ -160,17 +230,16 @@ public class MainActivity extends AppCompatActivity {
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
 </manifest>
-```      
+```
 
->**Tips:** Cache Strategy of ViewPager is to cache three views in total. Android will instantiate the next Item view and keep the previous Item view.  
+>**Tips:** Cache Strategy of ViewPager is to cache three views in total. Android will instantiate the next Item view and keep the previous Item view.
 ![cache log](https://lh3.googleusercontent.com/-phu3l9sA4CM/Veu6gqzv5VI/AAAAAAAAA6I/zAipbswngBM/s520-Ic42/adapter_cache.png)
 
 #### 5. Source Code
 [https://github.com/princegyw/ViewPagerDemo](https://github.com/princegyw/ViewPagerDemo)
-
- 
