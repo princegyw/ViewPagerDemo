@@ -1,5 +1,6 @@
 ### ViewPager
 ListView enables us to populate and show thousands of datum within it and it is a a vertical flip up and down. However, many of time, we need to flip horizontally. For example, we may want to make an album to show images and which enables us to flip images one by one. The final look of the project is as the snapshot showing below.
+
 ![](https://lh3.googleusercontent.com/-a6xDrZ9aJQE/VexbbL-tqxI/AAAAAAAAA6g/NMC7ygDUxYg/s512-Ic42/device-2015-09-06-232457.png)
 
 #### 1. ViewPager
@@ -215,6 +216,7 @@ public class MainActivity extends AppCompatActivity
 ```
 
 >**Tips:** Even though we recycled the bitmap objects both in Java layer and C layer. Hoever, GC won't be sure to execute promptly thus you still may receive **OutOfMemory(OOM)** error. To avoid this, a lazy way is to declare to use android:largeHeap="true" in your application in AndroidManifest.xml  
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -238,7 +240,7 @@ public class MainActivity extends AppCompatActivity
 </manifest>
 ```
 
->**Tips:** Cache Strategy of ViewPager is to cache three views in total. Android will instantiate the next Item view and keep the previous Item view.
+>**Tips:** Cache Strategy of ViewPager is to cache three views in total. Android will instantiate the next Item view and keep the previous Item view.  
 ![cache log](https://lh3.googleusercontent.com/-phu3l9sA4CM/Veu6gqzv5VI/AAAAAAAAA6I/zAipbswngBM/s520-Ic42/adapter_cache.png)
 
 #### 5. Source Code
